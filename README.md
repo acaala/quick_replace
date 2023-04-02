@@ -1,9 +1,16 @@
 # QREP
 
-## A fast, lightweight cli find and replace tool
+## A Quick, lightweight cli find and replace tool
 
 ### Usage
 
 ```bash
-qrep "text to replace" "replace text to" path/to/file.txt
+qrep "from" "to" "path/to/file.txt"
 ```
+
+
+#### Options
+
+| Flag | Default | Description |
+| ---- | ------- | ----------- |
+| -s (-speed) | 1 | 1 Fastest (minimal feedback), 2 Fast (some feedback), 3 slower (all feedback) |
