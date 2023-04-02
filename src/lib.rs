@@ -23,15 +23,15 @@ pub fn run(from: &String, to: &String, file_path: &String, new_path: &String) ->
 
 fn find_matches_and_replace(contents: Cow<str>, from: &String, to: &String) -> String {
     let string_matches = contents.matches(&*from).into_iter().count();
-    println!("Found {:#?} Matches", string_matches);
+    println!("Found {:#?} instances of {:#?}", string_matches, from);
 
+    println!("Replacing to {:?}..", to);
     contents.replace(&*from, &to)
 }
 
 fn create_file_and_put_contents(content_to_write: String, new_path: &String) -> io::Result<()> {
-    println!("Creating new file");
     let mut new_file = File::create(new_path)?;
-    println!("Saving new file");
+    println!("Saving to {:?}", new_path);
     new_file.write_all(content_to_write.as_bytes())?;
 
     Ok(())
