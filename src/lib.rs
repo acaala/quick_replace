@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use std::fs::{File, self};
-use std::{process, path};
+use std::{process};
 use std::time::Instant;
 use std::path::Path;
 

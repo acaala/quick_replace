@@ -1,9 +1,16 @@
-# qrep - Quick Replace
+# qrep
 
-## A Quick, lightweight cli find and replace tool
+## qrep - Quick Replace is a lightweight find and replace tool.
 
 ### Usage
 
 ```bash
-qrep "from" "to" "path/to/file.txt" "new/path/name.txt"
+qrep [OPTIONS] <FROM> <TO> <path/to/file.txt>
 ```
+
+#### Options
+
+| Flag | Description |
+| ---- | ----------- |
+| -h | Display help information |
+| -r | Replace file without creating a backup |
