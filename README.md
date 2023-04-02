@@ -1,6 +1,6 @@
 # qrep
 
-## qrep - Quick Replace is a lightweight find and replace tool.
+## A fast, lightweight find and replace tool
 
 ### Usage
 
