@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::fs::File;
+use std::process;
 use std::time::Instant;
 use std::io::{prelude::*, self};
 
@@ -24,6 +25,11 @@ pub fn run(from: &String, to: &String, file_path: &String, new_path: &String) ->
 fn find_matches_and_replace(contents: Cow<str>, from: &String, to: &String) -> String {
     let string_matches = contents.matches(&*from).into_iter().count();
     println!("Found {:#?} instances of {:#?}", string_matches, from);
+    
+    if string_matches == 0 {
+        println!("Exiting...");
+        process::exit(0)
+    }
 
     println!("Replacing to {:?}..", to);
     contents.replace(&*from, &to)

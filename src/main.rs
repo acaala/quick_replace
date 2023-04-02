@@ -1,5 +1,4 @@
 use std::{process, io::ErrorKind};
-
 use clap::Parser;
 
 #[derive(Parser, Debug)]
