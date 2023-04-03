@@ -8,7 +8,7 @@ use zip::{ZipWriter, CompressionMethod};
 use zip::write::FileOptions;
 
 pub fn create(file_path: &String) -> Result<()> {
-let original_file_path = Path::new(&file_path);
+    let original_file_path = Path::new(&file_path);
 
     let backup_file_name = file_path.to_owned() + ".bak";
     let backup_path = Path::new(&backup_file_name);
@@ -23,7 +23,7 @@ pub fn create_compressed(file_path: &String, contents: &Cow<str>) -> ZipResult<(
     let file_path = Path::new(file_path);
     let zipped_file_name = format!("{}.bak.zip", &file_path.with_extension("").to_str().unwrap()).replace("\"", "");
     
-    let file = File::create(zipped_file_name).unwrap();
+    let file = File::create(zipped_file_name)?;
 
     let mut zip = ZipWriter::new(file);
     let options = FileOptions::default()
