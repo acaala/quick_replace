@@ -6,7 +6,9 @@ use std::path::Path;
 
 use std::io::{prelude::*, self};
 
-use clap::{Arg, Args};
+use zip::result::ZipResult;
+use zip::{ZipWriter, CompressionMethod};
+use zip::write::FileOptions;
 
 pub fn run(config: Config) -> io::Result<()> {
     let start = Instant::now();
@@ -24,9 +26,13 @@ pub fn run(config: Config) -> io::Result<()> {
 
     if !config.replace {
         println!("Saving backup file..");
-        create_backup(&config.file_path)?;
+       
+        if config.compress {
+            create_compressed_backup(&config.file_path, &contents)?;
+        } else {
+            create_backup(&config.file_path)?;
+        }
     }
-
 
     let result = replace(contents, &config.from, &config.to);
 
@@ -47,9 +53,33 @@ fn find_matches(contents: &Cow<str>, from: &String) -> usize {
 }
 
 fn replace(contents: Cow<str>, from: &String, to: &String) -> String {
-
     println!("Replacing {:?} to {:?}..", from, to);
     contents.replace(&*from, &to)
+}
+
+fn create_compressed_backup(file_path: &String, contents: &Cow<str>) -> ZipResult<()> {
+    // TODO: Refactor
+    println!("Compressing...");
+    let file_path = Path::new(file_path);
+
+    let file_name = file_path.file_stem().unwrap().to_str().unwrap();
+
+    let zipped_file_name = format!("{}.zip", file_name).replace("\"", "");
+
+    let file = File::create(zipped_file_name).unwrap();
+
+    let mut zip = ZipWriter::new(file);
+
+    let options = FileOptions::default()
+        .compression_method(CompressionMethod::Bzip2)
+        .unix_permissions(0o755);
+
+    zip.start_file(file_path.file_name().unwrap().to_str().unwrap(), options)?;
+    zip.write_all(&contents.as_bytes())?;
+
+    zip.finish()?;
+
+    Ok(())
 }
 
 fn create_backup(file_path: &String) -> io::Result<()> {
@@ -76,10 +106,11 @@ pub struct Config {
     to: String,
     file_path: String,
     replace: bool,
+    compress: bool,
 }
 
 impl Config {
-    pub fn build(from: String, to: String, file_path: String, replace: bool) -> Config {
-        Config { from, to, file_path, replace }
+    pub fn build(from: String, to: String, file_path: String, replace: bool, compress: bool) -> Config {
+        Config { from, to, file_path, replace, compress }
     }
 }

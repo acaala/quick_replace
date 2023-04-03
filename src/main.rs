@@ -16,17 +16,26 @@ struct Args {
     #[arg(index = 3)]
     file_path: String,
 
-    /// If you dont want to create a backup file.
+    /// If you dont want to create a backup file (cannot be used with -c (--compress)).
     #[arg(short, long, default_value_t = false)]
     replace: bool,
+
+    /// Compress the backup file (cannot be used with -r (--replace))
+    #[arg(short, long, default_value_t = false)]
+    compress: bool,
 }
 fn main() {
     let args = Args::parse();
 
+    if args.compress && args.replace {
+        println!("Cannot use -c (--compress) with -r (--replace)");
+        process::exit(0);
+    }
+
     // TODO: Not this..
     let file_path_clone = args.file_path.clone();
 
-    let config = qrep::Config::build(args.from, args.to, args.file_path, args.replace);
+    let config = qrep::Config::build(args.from, args.to, args.file_path, args.replace, args.compress);
 
     if let Err(error) = qrep::run(config) {
         match error.kind() {

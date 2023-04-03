@@ -13,4 +13,5 @@ qrep [OPTIONS] <FROM> <TO> <path/to/file.txt>
 | Flag | Description |
 | ---- | ----------- |
 | -h | Display help information |
-| -r | Replace file without creating a backup |
+| -r | Replace file without creating a backup (cannot be used with -c) |
+| -c | Compress backup file (cannot be used with -r) |

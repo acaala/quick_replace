@@ -13,3 +13,4 @@ keywords = ["cli", "find", "replace", "quick", "lightweight"]
 [dependencies]
 clap = { version = "4.2.1", features = ["derive"] }
 indicatif = "0.17.3"
+zip = "0.6.4"
