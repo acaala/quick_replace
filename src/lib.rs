@@ -58,18 +58,13 @@ fn replace(contents: Cow<str>, from: &String, to: &String) -> String {
 }
 
 fn create_compressed_backup(file_path: &String, contents: &Cow<str>) -> ZipResult<()> {
-    // TODO: Refactor
     println!("Compressing...");
     let file_path = Path::new(file_path);
-
-    let file_name = file_path.file_stem().unwrap().to_str().unwrap();
-
-    let zipped_file_name = format!("{}.zip", file_name).replace("\"", "");
-
+    let zipped_file_name = format!("{}.zip", &file_path.with_extension("").to_str().unwrap()).replace("\"", "");
+    
     let file = File::create(zipped_file_name).unwrap();
 
     let mut zip = ZipWriter::new(file);
-
     let options = FileOptions::default()
         .compression_method(CompressionMethod::Bzip2)
         .unix_permissions(0o755);

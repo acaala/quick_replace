@@ -32,7 +32,6 @@ fn main() {
         process::exit(0);
     }
 
-    // TODO: Not this..
     let file_path_clone = args.file_path.clone();
 
     let config = qrep::Config::build(args.from, args.to, args.file_path, args.replace, args.compress);
