@@ -2,6 +2,7 @@ use std::borrow::Cow;
 use std::fs::{File, rename};
 use std::io::{Write, Result};
 use std::path::Path;
+use std::process;
 
 use zip::result::ZipResult;
 use zip::{ZipWriter, CompressionMethod};
@@ -21,7 +22,7 @@ pub fn create(file_path: &String) -> Result<()> {
 pub fn create_compressed(file_path: &String, contents: &Cow<str>) -> ZipResult<()> {
     println!("Compressing...");
     let file_path = Path::new(file_path);
-    let zipped_file_name = format!("{}.bak.zip", &file_path.with_extension("").to_str().unwrap()).replace("\"", "");
+    let zipped_file_name = format!("{}.zip", &file_path.with_extension("").to_str().unwrap()).replace("\"", "");
     
     let file = File::create(zipped_file_name)?;
 
@@ -30,7 +31,12 @@ pub fn create_compressed(file_path: &String, contents: &Cow<str>) -> ZipResult<(
         .compression_method(CompressionMethod::Bzip2)
         .unix_permissions(0o755);
 
-    zip.start_file(file_path.file_name().unwrap().to_str().unwrap(), options)?;
+    let compressed_file_name = file_path.file_name().and_then(|f| f.to_str()).unwrap_or_else(|| {
+        println!("unexpected error reading filename");
+        process::exit(0)
+    });
+
+    zip.start_file(compressed_file_name, options)?;
     zip.write_all(&contents.as_bytes())?;
 
     zip.finish()?;
