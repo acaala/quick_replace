@@ -1,5 +1,6 @@
 use std::{process, io::ErrorKind};
 use clap::Parser;
+use qrep::config::Config;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -34,7 +35,7 @@ fn main() {
 
     let file_path_clone = args.file_path.clone();
 
-    let config = qrep::Config::build(args.from, args.to, args.file_path, args.replace, args.compress);
+    let config = Config::build(args.from, args.to, args.file_path, args.replace, args.compress);
 
     if let Err(error) = qrep::run(config) {
         match error.kind() {
