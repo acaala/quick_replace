@@ -1,6 +1,6 @@
 use std::{process, io::{Read}, time::Instant, fs::File, error::Error};
 use clap::Parser;
-use qrep::{worker, backup};
+use quick_replace::{worker, backup};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]

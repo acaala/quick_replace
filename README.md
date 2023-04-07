@@ -1,11 +1,11 @@
-# qrep
+# quick-replace
 
 ## A fast, lightweight find and replace tool
 
 ### Usage
 
 ```bash
-qrep [OPTIONS] <FROM> <TO> <path/to/file.txt>
+quick-replace [OPTIONS] <FROM> <TO> <path/to/file.txt>
 ```
 
 #### Options

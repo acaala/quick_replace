@@ -458,7 +458,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "qrep"
+name = "quick-replace"
 version = "0.1.0"
 dependencies = [
  "clap",

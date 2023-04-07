@@ -1,5 +1,5 @@
 [package]
-name = "qrep"
+name = "quick-replace"
 version = "0.1.0"
 description = "Quick, lightweight find and replace tool."
 repository = "https://github.com/acaala/qrep"
