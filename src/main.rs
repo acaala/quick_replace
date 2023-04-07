@@ -1,6 +1,6 @@
-use std::{process, io::ErrorKind};
+use std::{process, io::{Read}, time::Instant, fs::File, error::Error};
 use clap::Parser;
-use qrep::config::Config;
+use qrep::{worker, backup};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -25,6 +25,7 @@ struct Args {
     #[arg(short, long, default_value_t = false)]
     compress: bool,
 }
+
 fn main() {
     let args = Args::parse();
 
@@ -33,16 +34,45 @@ fn main() {
         process::exit(0);
     }
 
-    let file_path_clone = args.file_path.clone();
-
-    let config = Config::build(args.from, args.to, args.file_path, args.replace, args.compress);
-
-    if let Err(error) = qrep::run(config) {
-        match error.kind() {
-            ErrorKind::NotFound => eprintln!("{:?} does not exist.", file_path_clone),
-            _ =>  eprintln!("An error has occured: {:#?}", error),
-        }
-       
+    if let Err(error) = run_task(args) {
+        println!("{}", error);
         process::exit(0);
     }
+}
+
+fn run_task(args: Args) -> Result<(), Box<dyn Error>> {
+    let start = Instant::now();
+
+    let mut file = File::open(&args.file_path).unwrap_or_else(|e| {
+        println!("Error opening file: {}", e);
+        process::exit(0);
+    });
+
+    let mut buf = vec![];
+    file.read_to_end(&mut buf)?;
+    let contents = String::from_utf8_lossy(&buf);
+
+    if worker::find_matches(&contents, &args.from) == 0 {
+        println!("Exiting...");
+        process::exit(0)
+    }
+
+    if !args.replace {
+        println!("Saving backup file..");
+
+        if args.compress {
+            backup::create_compressed(&args.file_path, &contents)?;
+        } else {
+            backup::create(&args.file_path)?;
+        }
+    }
+
+    let result = worker::replace(contents, &args.from, &args.to);
+
+    worker::create_file_and_put_contents(result, &args.file_path)?;
+
+    let duration = start.elapsed();
+    println!("Done in: {:#?}", duration);
+
+    Ok(())
 }
