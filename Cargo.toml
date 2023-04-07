@@ -5,7 +5,7 @@ description = "Quick, lightweight find and replace tool."
 repository = "https://github.com/acaala/qrep"
 categories = ["command-line-interface"]
 edition = "2021"
-license = "MIT / Apache-2.0"
+license = "MIT"
 keywords = ["cli", "find", "replace", "quick", "lightweight"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
