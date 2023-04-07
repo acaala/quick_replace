@@ -8,6 +8,8 @@ use zip::result::ZipResult;
 use zip::{ZipWriter, CompressionMethod};
 use zip::write::FileOptions;
 
+
+/// Creates a backup file from the original
 pub fn create(file_path: &String) -> Result<()> {
     let original_file_path = Path::new(&file_path);
 
@@ -19,6 +21,7 @@ pub fn create(file_path: &String) -> Result<()> {
     Ok(())
 }
 
+/// Creates a compressed backup file from the original
 pub fn create_compressed(file_path: &String, contents: &Cow<str>) -> ZipResult<()> {
     println!("Compressing...");
     let file_path = Path::new(file_path);
