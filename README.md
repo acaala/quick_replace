@@ -1,4 +1,4 @@
-# quick-replace
+# Quick Replace
 
 ## A fast, lightweight find and replace tool
 
